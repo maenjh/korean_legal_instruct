@@ -1,0 +1,20 @@
+# Domain Router Configuration
+model: "klue/roberta-base"  # Korean BERT model for classification
+
+# Router-specific training config
+training:
+  num_epochs: 5
+  batch_size: 16
+  learning_rate: 3e-5
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+
+# Classification labels
+labels:
+  - "civil"          # 민사법
+  - "criminal"       # 형사법
+  - "ip"             # 지식재산권법
+  - "administrative" # 행정법
+
+# Output
+output_dir: "models/router"

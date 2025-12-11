@@ -1,0 +1,11 @@
+# Intellectual Property Law LoRA Configuration
+domain: "ip"
+domain_kr: "지식재산권법"
+
+# Inherits from base_config.yaml
+# Domain-specific overrides can be added here
+
+output_dir: "models/lora/ip"
+
+# Domain-specific data path
+data_path: "data/processed/ip"

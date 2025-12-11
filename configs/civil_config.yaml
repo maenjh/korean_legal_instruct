@@ -1,0 +1,11 @@
+# Civil Law LoRA Configuration
+domain: "civil"
+domain_kr: "민사법"
+
+# Inherits from base_config.yaml
+# Domain-specific overrides can be added here
+
+output_dir: "models/lora/civil"
+
+# Domain-specific data path
+data_path: "data/processed/civil"

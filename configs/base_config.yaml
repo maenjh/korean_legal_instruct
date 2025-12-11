@@ -1,0 +1,45 @@
+# Base Model Configuration
+base_model: "beomi/KoAlpaca-Polyglot-5.8B"  # Korean language model
+model_max_length: 512
+
+# LoRA Configuration
+lora_config:
+  r: 16
+  lora_alpha: 32
+  target_modules:
+    - q_proj
+    - v_proj
+    - k_proj
+    - o_proj
+  lora_dropout: 0.05
+  bias: "none"
+  task_type: "CAUSAL_LM"
+
+# Training Configuration
+training:
+  num_epochs: 3
+  batch_size: 4
+  gradient_accumulation_steps: 8
+  learning_rate: 2e-4
+  warmup_steps: 100
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  
+# Optimizer
+optimizer:
+  name: "adamw_torch"
+  betas: [0.9, 0.999]
+  eps: 1e-8
+
+# Data Configuration
+data:
+  train_split: 0.9
+  val_split: 0.1
+  seed: 42
+
+# Output Configuration
+output:
+  save_steps: 500
+  eval_steps: 500
+  logging_steps: 100
+  save_total_limit: 3

@@ -1,0 +1,11 @@
+# Criminal Law LoRA Configuration
+domain: "criminal"
+domain_kr: "형사법"
+
+# Inherits from base_config.yaml
+# Domain-specific overrides can be added here
+
+output_dir: "models/lora/criminal"
+
+# Domain-specific data path
+data_path: "data/processed/criminal"

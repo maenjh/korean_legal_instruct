@@ -1,0 +1,11 @@
+# Administrative Law LoRA Configuration
+domain: "administrative"
+domain_kr: "행정법"
+
+# Inherits from base_config.yaml
+# Domain-specific overrides can be added here
+
+output_dir: "models/lora/administrative"
+
+# Domain-specific data path
+data_path: "data/processed/administrative"
