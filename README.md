@@ -81,6 +81,9 @@ cd legal_mvp_2
 pip install -r requirements.txt
 python app.py
 ```
+## 🖼️ 실행 화면
+
+![Korean Legal Instruct MVP](legal_mvp_2/mvp.png)
 
 ## 📜 라이선스
 
