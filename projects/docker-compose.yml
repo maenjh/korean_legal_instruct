@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  pytorch-1:
+    image: nvcr.io/nvidia/pytorch:23.10-py3
+    container_name: dnlp4
+    restart: always
+    shm_size: "16g"
+    working_dir: /workspace
+
+    volumes:
+      - ./workspace:/workspace
+      - ../models:/workspace/models
+      - ../data:/workspace/data
+
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["4"]
+              capabilities: [gpu]
+
+    command: ["/bin/bash", "-c", "tail -f /dev/null"]
+
+
+  pytorch-2:
+    image: nvcr.io/nvidia/pytorch:23.10-py3
+    container_name: dnlp4-eval   # <-- 평가용
+    restart: always
+    shm_size: "16g"
+    working_dir: /workspace
+
+    volumes:
+      - ./workspace:/workspace
+      - ../models:/workspace/models
+      - ../data:/workspace/data
+
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["4"]  # 동일 GPU를 공유할지, 다른 GPU를 쓸지는 선택
+              capabilities: [gpu]
+
+    command: ["/bin/bash", "-c", "tail -f /dev/null"]

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>법률 AI 상담 시스템</title>
+    <style>
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: #f4f4f9; margin: 0; display: flex; justify-content: center; height: 100vh; }
+        .chat-container { width: 100%; max-width: 800px; background: white; display: flex; flex-direction: column; box-shadow: 0 0 10px rgba(0,0,0,0.1); height: 100%; }
+        
+        /* Header Improvements */
+        .header { 
+            padding: 15px 20px; 
+            background-color: #2c3e50; 
+            color: white; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+        }
+        .header-title { font-size: 1.2em; font-weight: bold; }
+        .header-controls { display: flex; gap: 10px; align-items: center; }
+        
+        /* Slim Dropdown */
+        .slim-select {
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.95);
+            font-size: 0.9em;
+            cursor: pointer;
+            outline: none;
+            font-family: inherit;
+        }
+        .slim-select:hover { background-color: #fff; }
+
+        .reset-btn {
+            padding: 6px 12px;
+            font-size: 0.9em;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .reset-btn:hover { background-color: #c0392b; }
+
+        .chat-box { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        
+        /* Message Readability Improvements */
+        .message { 
+            max-width: 80%; 
+            padding: 15px 20px; 
+            border-radius: 15px; 
+            position: relative; 
+            font-size: 16px; /* 15px~16px */
+            line-height: 1.6; /* 1.55~1.65 */
+        }
+        .message.user { align-self: flex-end; background-color: #3498db; color: white; border-bottom-right-radius: 2px; }
+        .message.ai { align-self: flex-start; background-color: #ecf0f1; color: #2c3e50; border-bottom-left-radius: 2px; }
+        
+        /* Paragraph Spacing */
+        .message.ai p { margin: 0 0 12px 0; }
+        .message.ai p:last-child { margin-bottom: 0; }
+
+        /* Legal Clause Block */
+        .legal-clause {
+            background-color: #fff;
+            border: 1px solid #bdc3c7;
+            border-left: 5px solid #2c3e50;
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 4px;
+            font-size: 0.95em;
+        }
+        .legal-clause-title { font-weight: bold; display: block; margin-bottom: 5px; color: #2c3e50; }
+        
+        /* Bold Emphasis */
+        .highlight-text { font-weight: bold; color: #000; }
+
+        .domain-tag { font-size: 0.8em; color: #7f8c8d; margin-bottom: 5px; display: block; }
+        .input-area { padding: 20px; background: #fff; border-top: 1px solid #eee; display: flex; gap: 10px; align-items: center; }
+        input[type="text"] { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 25px; outline: none; font-size: 1em; }
+        button#send-btn { padding: 12px 25px; background-color: #2c3e50; color: white; border: none; border-radius: 25px; cursor: pointer; font-weight: bold; transition: background 0.2s; }
+        button#send-btn:hover { background-color: #34495e; }
+        button:disabled { background-color: #95a5a6; cursor: not-allowed; }
+        
+        .loading { display: none; color: #7f8c8d; font-style: italic; font-size: 0.9em; text-align: center; margin-top: 10px; }
+
+        /* Markdown Styles */
+        .message.ai h3 {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        .message.ai h3:first-child { margin-top: 0; }
+        
+        .message.ai blockquote {
+            background-color: #fff;
+            border: 1px solid #bdc3c7;
+            border-left: 5px solid #2c3e50;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            color: #555;
+            font-style: normal;
+        }
+        .message.ai ul, .message.ai ol { padding-left: 25px; margin: 10px 0; }
+        .message.ai li { margin-bottom: 5px; }
+        .message.ai strong { color: #000; font-weight: 700; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="header">
+            <div class="header-title">⚖️ 법률 AI 상담 시스템</div>
+            <div class="header-controls">
+                <select id="domain-select" class="slim-select">
+                    <option value="">🧠 자동 감지</option>
+                    <option value="civil">⚖️ 민사법</option>
+                    <option value="criminal">🔒 형사법</option>
+                    <option value="ip">💡 지식재산권</option>
+                    <option value="admin">🏛️ 행정법</option>
+                </select>
+                <button onclick="resetChat()" class="reset-btn">초기화</button>
+            </div>
+        </div>
+        <!-- Removed old controls div -->
+        <div class="chat-box" id="chat-box">
+            <div class="message ai">
+                <p>안녕하세요! 법률 상담 AI입니다. 무엇을 도와드릴까요?</p>
+            </div>
+        </div>
+        <div class="loading" id="loading">답변을 생성하고 있습니다...</div>
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="질문을 입력하세요..." onkeypress="if(event.key === 'Enter') sendMessage()">
+            <button onclick="sendMessage()" id="send-btn">전송</button>
+        </div>
+    </div>
+
+    <script>
+        let history = [];
+
+        async function sendMessage() {
+            const inputField = document.getElementById('user-input');
+            const message = inputField.value.trim();
+            if (!message) return;
+
+            // UI Update (User)
+            addMessage(message, 'user');
+            inputField.value = '';
+            setLoading(true);
+
+            const manualDomain = document.getElementById('domain-select').value || null;
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: message,
+                        history: history,
+                        manual_domain: manualDomain
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.error) {
+                    addMessage("오류가 발생했습니다: " + data.error, 'ai');
+                } else {
+                    const domainMap = {
+                        "civil": "민사법", "criminal": "형사법", "admin": "행정법", "ip": "지식재산권법"
+                    };
+                    const domainName = domainMap[data.predicted_domain] || data.predicted_domain;
+                    const answerPrefix = `[${domainName}] `;
+                    
+                    addMessage(data.answer, 'ai', domainName);
+                    history = data.history;
+                }
+            } catch (error) {
+                addMessage("서버 통신 오류가 발생했습니다.", 'ai');
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        function formatMessage(text) {
+            // Use marked library to parse Markdown
+            if (typeof marked !== 'undefined') {
+                return marked.parse(text);
+            } else {
+                // Fallback if marked is not loaded
+                return text.replace(/\n/g, "<br>");
+            }
+        }
+
+        function addMessage(text, role, domain = null) {
+            const chatBox = document.getElementById('chat-box');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${role}`;
+            
+            if (role === 'ai' && domain) {
+                const domainSpan = document.createElement('span');
+                domainSpan.className = 'domain-tag';
+                domainSpan.innerText = `🏷️ ${domain}`;
+                msgDiv.appendChild(domainSpan);
+            }
+            
+            if (role === 'ai') {
+                const contentDiv = document.createElement('div');
+                contentDiv.innerHTML = formatMessage(text);
+                msgDiv.appendChild(contentDiv);
+            } else {
+                const p = document.createElement('p');
+                p.innerText = text;
+                p.style.margin = 0; // Reset margin for user message
+                msgDiv.appendChild(p);
+            }
+            
+            chatBox.appendChild(msgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function setLoading(isLoading) {
+            document.getElementById('loading').style.display = isLoading ? 'block' : 'none';
+            document.getElementById('send-btn').disabled = isLoading;
+            document.getElementById('user-input').disabled = isLoading;
+        }
+
+        function resetChat() {
+            history = [];
+            document.getElementById('chat-box').innerHTML = '<div class="message ai"><p>안녕하세요! 법률 상담 AI입니다. 무엇을 도와드릴까요?</p></div>';
+        }
+    </script>
+</body>
+</html>

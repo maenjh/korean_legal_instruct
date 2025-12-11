@@ -1,0 +1,23 @@
+/usr/local/lib/python3.10/dist-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/usr/local/lib/python3.10/dist-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
+  warn(
+/usr/local/lib/python3.10/dist-packages/torchvision/datapoints/__init__.py:14: UserWarning: The torchvision.datapoints and torchvision.transforms.v2 namespaces are still Beta. While we do not expect major breaking changes, some APIs may still change according to user feedback. Please submit any feedback you may have in this issue: https://github.com/pytorch/vision/issues/6753, and you can also check out https://github.com/pytorch/vision/issues/7319 to learn more about the APIs that we suspect might involve future changes. You can silence this warning by calling torchvision.disable_beta_transforms_warning().
+  warnings.warn(_BETA_TRANSFORMS_WARNING)
+/usr/local/lib/python3.10/dist-packages/torchvision/transforms/v2/__init__.py:64: UserWarning: The torchvision.datapoints and torchvision.transforms.v2 namespaces are still Beta. While we do not expect major breaking changes, some APIs may still change according to user feedback. Please submit any feedback you may have in this issue: https://github.com/pytorch/vision/issues/6753, and you can also check out https://github.com/pytorch/vision/issues/7319 to learn more about the APIs that we suspect might involve future changes. You can silence this warning by calling torchvision.disable_beta_transforms_warning().
+  warnings.warn(_BETA_TRANSFORMS_WARNING)
+`torch_dtype` is deprecated! Use `dtype` instead!
+==================================================
+QLoRA + TRL SFTTrainer 학습 시작
+==================================================
+
+토크나이저 로드 중: /workspace/models/models--skt--A.X-3.1-Light/snapshots/9b41bb2406472634d8812c0b8931fa40fa9a6c3a
+
+모델 로드 중 (4bit 양자화): /workspace/models/models--skt--A.X-3.1-Light/snapshots/9b41bb2406472634d8812c0b8931fa40fa9a6c3a
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:03<00:06,  3.43s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:07<00:03,  3.68s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:10<00:00,  3.37s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:10<00:00,  3.43s/it]
+
+모델을 k-bit training에 맞게 준비 중...
+
+LoRA 적용 중...
+trainable params: 39,780,352 || all params: 7,304,581,120 || trainable%: 0.5446
+
+데이터 로드 중: /workspace/data/3.개방데이터/1.데이터/Training/civil_law_instruct.jsonl
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 1885 examples [00:00, 15083.51 examples/s]Generating train split: 8031 examples [00:00, 33939.34 examples/s]Generating train split: 14248 examples [00:00, 42538.85 examples/s]Generating train split: 19151 examples [00:00, 41980.20 examples/s]Generating train split: 23601 examples [00:00, 40912.81 examples/s]Generating train split: 28005 examples [00:00, 39569.35 examples/s]Generating train split: 32296 examples [00:00, 38844.95 examples/s]Generating train split: 36699 examples [00:00, 38494.91 examples/s]Generating train split: 41024 examples [00:01, 29633.97 examples/s]Generating train split: 45415 examples [00:01, 30918.44 examples/s]Generating train split: 49734 examples [00:01, 32607.52 examples/s]Generating train split: 54132 examples [00:01, 33746.95 examples/s]Generating train split: 58438 examples [00:01, 34355.67 examples/s]Generating train split: 62766 examples [00:01, 34662.94 examples/s]Generating train split: 67156 examples [00:01, 35242.74 examples/s]Generating train split: 71550 examples [00:02, 35726.25 examples/s]
