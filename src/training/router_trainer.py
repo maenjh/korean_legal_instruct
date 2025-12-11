@@ -1,6 +1,7 @@
 """
 Training utilities for domain router.
 """
+import json
 import os
 import yaml
 import torch
@@ -169,7 +170,6 @@ class RouterTrainer:
         self.tokenizer.save_pretrained(self.output_dir)
         
         # Save label mappings
-        import json
         label_config = {
             'labels': self.labels,
             'label_to_id': self.label_to_id,
